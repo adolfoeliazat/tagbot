@@ -6,6 +6,7 @@ from nxt.motor import *
 from nxt.sensor import *
 from math import pi
 from datetime import datetime
+from time import sleep
 
 TagBot = nxt.locator.find_one_brick()   # connect to nxt
 horiz_axis = Motor(TagBot, PORT_A)      # motor & sensor port mapping
@@ -41,7 +42,7 @@ try:
                 continue    # this stops TagBot repeating the vertical measurement
             for n in range(repeats):
                 print(datetime.now(), tag, grid, str(x*d_angle).zfill(3) ,str(y*d_angle).zfill(3), str(n), sep=",", end=",")
-                pt.flushInput()     # gets rid of any accumulated junk
+                pt.flushInput()
                 tracks.run(-72)
                 while not front.is_pressed():
                     if pt.inWaiting()>0:   # checks for messages
@@ -52,9 +53,24 @@ try:
                             break   # ...and stops advancing if it is
                 else:
                     tracks.brake()
-                    print("not found")
-                tracks.turn(64, 5*step_deg)    # this distance may require adjusting
+                    if pt.inWaiting()>0:   # checks for messages
+                        data=pt.readline()
+                        if data[:3] == "TAG":   # checks if message is a tag...
+                            print(str(infra.get_distance()).zfill(3))
+                        else:
+                            print("not found")
+                    else:
+                        print("not found")
+                tracks.run(64)
+                pt.flushInput()
+                sleep(1)
+                while pt.inWaiting()>0:
+                    pt.flushInput()
+                    sleep(0.05)
+                else:
+                    tracks.brake()
             tracks.run(120)
+            sleep(0.2)  #waits to start checking touch sensor in case TagBot tips forwards enough to release it when it starts reversing. May need adjusting (secs)
             while rear.is_pressed():
                 pass
             else:
