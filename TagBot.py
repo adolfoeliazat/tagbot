@@ -61,14 +61,15 @@ try:
                             print("not found")
                     else:
                         print("not found")
-                tracks.run(64)
-                pt.flushInput()
-                sleep(1)
-                while pt.inWaiting()>0:
+                if n!=repeats-1:
+                    tracks.run(72)
                     pt.flushInput()
-                    sleep(0.05)
-                else:
-                    tracks.brake()
+                    sleep(0.5)
+                    while pt.inWaiting()>0:
+                        pt.flushInput()
+                        sleep(0.05)
+                    else:
+                        tracks.brake()
             tracks.run(120)
             sleep(0.2)  #waits to start checking touch sensor in case TagBot tips forwards enough to release it when it starts reversing. May need adjusting (secs)
             while rear.is_pressed():
@@ -76,11 +77,11 @@ try:
             else:
                 tracks.brake()
         try:
-            horiz_axis.turn(-32, 185-d_angle)   # runs into block and gets stopped
+            horiz_axis.turn(-32, 180-d_angle)   # runs into block and gets stopped
         except BlockedException:
             pass
     try:
-        vert_axis.turn(-32, 185-d_angle)
+        vert_axis.turn(-32, 180-d_angle)
     except BlockedException:
         pass
     horiz_axis.idle()
