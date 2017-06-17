@@ -40,4 +40,4 @@ The `scan` tagbot expects a single command line parameter: a tag ID:
 
 `sudo scan.py <tagID>`
 
-The tag ID and grid parameters are freeform text values that are included in the output of the scripts (on stdout) to assist in keeping track of testing runs.  For example the <gridID> could be of the form xx.yy to identify the position on the surface of the antenna where the tag is being presented.
+The tag ID and grid parameters are freeform text values that are included in the output of the scripts (on stdout) to assist in keeping track of testing runs.  For example the `<gridID>` could be of the form xx.yy to identify the position on the surface of the antenna where the tag is being presented.
